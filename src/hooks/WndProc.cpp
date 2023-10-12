@@ -109,7 +109,9 @@ LRESULT CALLBACK Base::Hooks::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			//skip what we dont need on hands
 			while (weaponA1Value == 4
 				|| weaponA1Value == 5
-				|| weaponA1Value == 12)
+				|| weaponA1Value == 12
+				|| weaponA1Value == 8
+				|| weaponA1Value == 11)
 			{
 				weaponA1Value--;
 			}
@@ -131,7 +133,9 @@ LRESULT CALLBACK Base::Hooks::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			}
 			while (weaponA1Value == 4
 				|| weaponA1Value == 5
-				|| weaponA1Value == 12)
+				|| weaponA1Value == 12
+				|| weaponA1Value == 8
+				|| weaponA1Value == 11)
 			{
 				weaponA1Value++;
 			}
@@ -156,8 +160,12 @@ LRESULT CALLBACK Base::Hooks::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			//skip what we dont need on legs
 			while (weaponA2Value == 2
 				|| weaponA2Value == 3
+				|| weaponA2Value == 4
+				|| weaponA2Value == 5
 				|| weaponA2Value == 9
-				|| weaponA2Value == 16)
+				|| weaponA2Value == 16
+				|| weaponA2Value == 11
+				|| weaponA2Value == 12)
 			{
 				weaponA2Value--;
 			}
@@ -179,8 +187,12 @@ LRESULT CALLBACK Base::Hooks::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			}
 			while (weaponA2Value == 2
 				|| weaponA2Value == 3
+				|| weaponA2Value == 4
+				|| weaponA2Value == 5
 				|| weaponA2Value == 9
-				|| weaponA2Value == 16)
+				|| weaponA2Value == 16
+				|| weaponA2Value == 11
+				|| weaponA2Value == 12)
 			{
 				weaponA2Value++;
 			}
