@@ -11,9 +11,17 @@
 
 #include <base.h> // for Data::ShowMenu
 
+
+
 class GameHook {
 public:
 	// patch toggles
+
+	static bool leftPressed;
+	static bool rightPressed;
+	static bool upPressed;
+	static bool downPressed;
+
 	static bool takeNoDamage_toggle;
 	static bool focusPatch_toggle;
 	static bool infJumps_toggle;
@@ -161,6 +169,7 @@ public:
 	static uintptr_t WeaponA2Address;
 	static uintptr_t WeaponB1Address;
 	static uintptr_t WeaponB2Address;
+	static uintptr_t WeaponA1Prev;
 
 	// imgui
 	static float windowHeightHack;
@@ -190,6 +199,9 @@ public:
 	static int showMessageTimerF3;
 	static int showMessageTimerF4;
 	static int showMessageTimerF5;
+
+	static const char* previousWeaponName;
+	static const char* previousWeaponName2;
 
 	// dev functions
 	static void _patch(char* dst, char* src, int size);
