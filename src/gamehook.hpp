@@ -2,7 +2,7 @@
 #include <Windows.h>
 #include <TlHelp32.h>
 #include <string>
-
+#include <XInput.h>
 #include "../utils/config.hpp"
 #include "libmem++/libmem.hpp"
 #include "MinHook/include/MinHook.h"
@@ -21,6 +21,17 @@ public:
 	static bool rightPressed;
 	static bool upPressed;
 	static bool downPressed;
+	static int switchLimit;
+
+	static int weaponA1;
+	static int weaponA2;
+	static int weaponB1;
+	static int weaponB2;
+
+	static int previousMoveWrite;
+	static int currentSet;
+
+	static bool isCallerCalled;
 
 	static bool takeNoDamage_toggle;
 	static bool focusPatch_toggle;
@@ -170,6 +181,9 @@ public:
 	static uintptr_t WeaponB1Address;
 	static uintptr_t WeaponB2Address;
 	static uintptr_t WeaponA1Prev;
+	static uintptr_t WeaponActiveSet;
+	static uintptr_t WeaponPickedSet;
+
 
 	// imgui
 	static float windowHeightHack;
@@ -193,12 +207,18 @@ public:
 	static const char* CostumeNames(int costumeID);
 	static const char* AccessoryNames(int accessoryID);
 	static const char* GetInputTypeName(int inputID);
+	static const char* SetNames(int accessoryID);
 	static int messageTimer;
 	static int showMessageTimerF1;
 	static int showMessageTimerF2;
 	static int showMessageTimerF3;
 	static int showMessageTimerF4;
 	static int showMessageTimerF5;
+
+	static void switchHandsLeft(int* weapon, XINPUT_STATE state, int cSet);
+	static void switchHandsRight(int* weapon, XINPUT_STATE state, int cSet);
+	static void switchLegsUp(int* weapon, XINPUT_STATE state, int cSet);
+	static void switchLegsDown(int* weapon, XINPUT_STATE state, int cSet);
 
 	static const char* previousWeaponName;
 	static const char* previousWeaponName2;
