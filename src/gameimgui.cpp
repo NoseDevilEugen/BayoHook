@@ -1,4 +1,4 @@
-﻿#include <base.h>
+#include <base.h>
 #include "gamehook.hpp"
 #include "LicenseStrings.hpp"
 #include <array>
@@ -42,6 +42,9 @@ uintptr_t GameHook::WeaponA1Address = 0x5AA741C;
 uintptr_t GameHook::WeaponA2Address = 0x5AA7420;
 uintptr_t GameHook::WeaponB1Address = 0x5AA742C;
 uintptr_t GameHook::WeaponB2Address = 0x5AA7430;
+uintptr_t GameHook::WeaponActiveSet = 0x5AA744C;
+uintptr_t GameHook::WeaponPickedSet = 0x5AA7450;
+
 
 // tick
 bool GameHook::comboMakerTest1 = false;
@@ -93,6 +96,8 @@ void GameHook::GameImGui(void) {
     int& weaponA2Value = *(int*)GameHook::WeaponA2Address;
     int& weaponB1Value = *(int*)GameHook::WeaponB1Address;
     int& weaponB2Value = *(int*)GameHook::WeaponB2Address;
+
+    int& weaponActiveSet = *(int*)GameHook::WeaponActiveSet;
 
     GameHook::windowWidth = 40.0f * ImGui::GetFontSize();
     GameHook::sameLineWidth = windowWidth * 0.5f;
@@ -487,22 +492,34 @@ void GameHook::GameImGui(void) {
                 ImGui::InputFloat("##ComboMultiplierInputFloat", &comboMultiplierValue, 1, 10, "%.1f");
                 ImGui::PopItemWidth();
 
+                ImGui::Text("Weapon Set:");
+                ImGui::SameLine();
+                ImGui::Text(GameHook::SetNames(weaponActiveSet));
+
                 ImGui::Text("Weapon Set A:");
                 help_marker("WIP, requires entering and exiting the weapon select menu to apply");
                 ImGui::PushItemWidth(inputItemWidth);
                 ImGui::InputInt("##WeaponA1InputInt", &weaponA1Value, 1, 10);
                 ImGui::SameLine();
                 ImGui::Text(GameHook::WeaponNames(weaponA1Value));
+                ImGui::SameLine();
+                ImGui::Text(GameHook::WeaponNames(GameHook::weaponA1));
                 ImGui::InputInt("##WeaponA2InputInt", &weaponA2Value, 1, 10);
                 ImGui::SameLine();
                 ImGui::Text(GameHook::WeaponNames(weaponA2Value));
+                ImGui::SameLine();
+                ImGui::Text(GameHook::WeaponNames(GameHook::weaponA2));
                 ImGui::Text("Weapon Set B:");
                 ImGui::InputInt("##WeaponB1InputInt", &weaponB1Value, 1, 10);
                 ImGui::SameLine();
                 ImGui::Text(GameHook::WeaponNames(weaponB1Value));
+                ImGui::SameLine();
+                ImGui::Text(GameHook::WeaponNames(GameHook::weaponB1));
                 ImGui::InputInt("##WeaponB2InputInt", &weaponB2Value, 1, 10);
                 ImGui::SameLine();
                 ImGui::Text(GameHook::WeaponNames(weaponB2Value));
+                ImGui::SameLine();
+                ImGui::Text(GameHook::WeaponNames(GameHook::weaponB2));
                 ImGui::PopItemWidth();
 
                 if (ImGui::Button("Call Weapon Swap")) {
@@ -1107,6 +1124,17 @@ const char* GameHook::WeaponNames(int weaponID) {
     }
 }
 
+const char* GameHook::SetNames(int accessoryID) {
+    switch (accessoryID) {
+    case 0:
+        return "A";
+    case 1:
+        return "B";
+    default:
+        return "";
+    }
+}
+
 const char* GameHook::CostumeNames(int costumeID) {
     switch (costumeID) {
     case 0:
@@ -1220,6 +1248,8 @@ const char* GameHook::GetInputTypeName(int inputTypeID) {
         return "";
     }
 }
+
+
 
 void GameHook::BackgroundImGui(void) {
     if (GameHook::showMessages_toggle) {
