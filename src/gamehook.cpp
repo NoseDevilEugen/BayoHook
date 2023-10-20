@@ -1,5 +1,7 @@
 #include "gamehook.hpp"
 
+bool GameHook::isCallerCalled = false;
+
 // patches
 bool GameHook::takeNoDamage_toggle = false;
 void GameHook::TakeNoDamage(bool enabled) {
@@ -2116,7 +2118,10 @@ void GameHook::SaveStates_LoadState() {
 }
 
 void GameHook::WeaponSwapCaller(void) {
+	//GameHook::isCallerCalled=true;
 	uintptr_t weaponSwapCallAddress = 0xC43ED0;
+	//
+	uintptr_t addressOf = 0x05BB8B60;
 	__asm {
 		pushad
 		pushfd
@@ -2124,7 +2129,10 @@ void GameHook::WeaponSwapCaller(void) {
 		popfd
 		popad
 	}
+	//GameHook::isCallerCalled = false;
+	//GameHook::switchLimit = 90;
 }
+
 
 // dev functions
 void GameHook::_patch(char* dst, char* src, int size) {
