@@ -33,6 +33,15 @@ public:
 
 	static bool isCallerCalled;
 
+
+	static int pairUp[2];
+	static int pairDown[2];
+	static int pairLeft[2];
+	static int pairRight[2];
+
+	static int currentPair[2];
+
+
 	static bool takeNoDamage_toggle;
 	static bool focusPatch_toggle;
 	static bool infJumps_toggle;
