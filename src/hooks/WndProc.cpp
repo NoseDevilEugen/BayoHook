@@ -32,7 +32,6 @@ int GameHook::switchLimit = 0;
 
 
 
-
 int GameHook::previousMoveWrite = -1;
 
 int maxLimit = 90;
@@ -134,17 +133,17 @@ LRESULT CALLBACK Base::Hooks::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 	{
 		if (GameHook::currentSet == 1)
 		{
-			weaponB1Value = GameHook::weaponB1;
-			weaponB2Value = GameHook::weaponB2;
-			GameHook::weaponA1 = weaponA1Value;
-			GameHook::weaponA2 = weaponA2Value;
+			weaponB1Value = GameHook::currentPair[0];
+			weaponB2Value = GameHook::currentPair[1];
+			//GameHook::weaponA1 = weaponA1Value;
+			//GameHook::weaponA2 = weaponA2Value;
 		}
 		else if(GameHook::currentSet==0)
 		{
-			weaponA1Value = GameHook::weaponA1;
-			weaponA2Value = GameHook::weaponA2;
-			GameHook::weaponB1 = weaponB1Value;
-			GameHook::weaponB2 = weaponB2Value;
+			weaponA1Value = GameHook::currentPair[0];
+			weaponA2Value = GameHook::currentPair[1];
+			//GameHook::weaponB1 = weaponB1Value;
+			//GameHook::weaponB2 = weaponB2Value;
 		}
 		GameHook::WeaponSwapCaller();
 		GameHook::currentSet = -1;
@@ -167,20 +166,23 @@ void GameHook::switchHandsLeft(int* weapon, XINPUT_STATE state, int cSet)
 
 		GameHook::isCallerCalled = true;
 		GameHook::leftPressed = true;
-		*weapon = *weapon - 1;
-		if (*weapon < 0)
-		{
-			*weapon = 17;
-		}
-		//skip what we dont need on hands
-		while (*weapon == 4
-			|| *weapon == 5
-			|| *weapon == 12
-			|| *weapon == 8
-			|| *weapon == 11)
-		{
-			(*weapon)--;
-		}
+
+		//*weapon = *weapon - 1;
+		//if (*weapon < 0)
+		//{
+		//	*weapon = 17;
+		//}
+		////skip what we dont need on hands
+		//while (*weapon == 4
+		//	|| *weapon == 5
+		//	|| *weapon == 12
+		//	|| *weapon == 8
+		//	|| *weapon == 11)
+		//{
+		//	(*weapon)--;
+		//}
+		GameHook::currentPair[0] = GameHook::pairLeft[0];
+		GameHook::currentPair[1] = GameHook::pairLeft[1];
 		GameHook::currentSet = cSet;
 	}
 }
@@ -199,20 +201,22 @@ void GameHook::switchHandsRight(int* weapon, XINPUT_STATE state, int cSet)
 
 		GameHook::isCallerCalled = true;
 		GameHook::rightPressed = true;
-		*weapon = *weapon + 1;
-		if (*weapon > 17)
-		{
-			*weapon = 0;
-		}
-		//skip what we dont need on hands
-		while (*weapon == 4
-			|| *weapon == 5
-			|| *weapon == 12
-			|| *weapon == 8
-			|| *weapon == 11)
-		{
-			(*weapon)++;
-		}
+		//*weapon = *weapon + 1;
+		//if (*weapon > 17)
+		//{
+		//	*weapon = 0;
+		//}
+		////skip what we dont need on hands
+		//while (*weapon == 4
+		//	|| *weapon == 5
+		//	|| *weapon == 12
+		//	|| *weapon == 8
+		//	|| *weapon == 11)
+		//{
+		//	(*weapon)++;
+		//}
+		GameHook::currentPair[0] = GameHook::pairRight[0];
+		GameHook::currentPair[1] = GameHook::pairRight[1];
 		GameHook::currentSet = cSet;
 	}
 }
@@ -231,24 +235,26 @@ void GameHook::switchLegsUp(int* weapon, XINPUT_STATE state, int cSet)
 		GameHook::isCallerCalled = true;
 		//GameHook::switchLimit = maxLimit;
 		//weaponB2Value = weaponA2Value;
-		*weapon = *weapon - 1;
+		//*weapon = *weapon - 1;
 
-		if (*weapon < 0)
-		{
-			*weapon = 17;
-		}
-		//skip what we dont need on legs
-		while (*weapon == 2
-			|| *weapon == 3
-			|| *weapon == 4
-			|| *weapon == 5
-			|| *weapon == 9
-			|| *weapon == 16
-			|| *weapon == 11
-			|| *weapon == 12)
-		{
-			(*weapon)--;
-		}
+		//if (*weapon < 0)
+		//{
+		//	*weapon = 17;
+		//}
+		////skip what we dont need on legs
+		//while (*weapon == 2
+		//	|| *weapon == 3
+		//	|| *weapon == 4
+		//	|| *weapon == 5
+		//	|| *weapon == 9
+		//	|| *weapon == 16
+		//	|| *weapon == 11
+		//	|| *weapon == 12)
+		//{
+		//	(*weapon)--;
+		//}
+		GameHook::currentPair[0] = GameHook::pairUp[0];
+		GameHook::currentPair[1] = GameHook::pairUp[1];
 		GameHook::currentSet = cSet;
 		//GameHook::WeaponSwapCaller();
 	}
@@ -269,7 +275,7 @@ void GameHook::switchLegsDown(int* weapon, XINPUT_STATE state, int cSet)
 		//GameHook::switchLimit = maxLimit;
 		GameHook::downPressed = true;
 		//weaponB2Value = GameHook::weaponA2;
-		*weapon = *weapon + 1;
+		/**weapon = *weapon + 1;
 		if (*weapon > 17)
 		{
 			*weapon = 0;
@@ -284,7 +290,9 @@ void GameHook::switchLegsDown(int* weapon, XINPUT_STATE state, int cSet)
 			|| *weapon == 12)
 		{
 			(*weapon)++;
-		}
+		}*/
+		GameHook::currentPair[0] = GameHook::pairDown[0];
+		GameHook::currentPair[1] = GameHook::pairDown[1];
 		GameHook::currentSet = cSet;
 		//GameHook::WeaponSwapCaller();
 	}
