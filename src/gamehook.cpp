@@ -2291,6 +2291,15 @@ void GameHook::onConfigLoad(const utils::Config& cfg) {
 	saveStatesHotkeys_toggle = cfg.get<bool>("SaveStatesHotkeysToggle").value_or(false);
 	tauntWithTimeBracelet_toggle = cfg.get<bool>("TauntWithTimeBraceletToggle").value_or(false);
 
+	pairUp[0] = cfg.get<int>("up1").value_or(0);
+	pairUp[1] = cfg.get<int>("up2").value_or(0);
+	pairDown[0] = cfg.get<int>("down1").value_or(18);
+	pairDown[1] = cfg.get<int>("down2").value_or(18);
+	pairLeft[0] = cfg.get<int>("left1").value_or(2);
+	pairLeft[1] = cfg.get<int>("left2").value_or(6);
+	pairRight[0] = cfg.get<int>("right1").value_or(3);
+	pairRight[1] = cfg.get<int>("right2").value_or(7);
+
 	//tick
 	/*comboMakerTest1 = cfg.get<bool>("ComboMakerTest1Toggle").value_or(false);
 	comboMakerMoveID1 = cfg.get<int>("ComboMakerMoveID1").value_or(-1);
@@ -2379,5 +2388,13 @@ void GameHook::onConfigSave(utils::Config& cfg) {
 
 	cfg.set<bool>("ForceThirdAccessoryToggle", forceThirdAccessory_toggle);
 	cfg.set<int>("DesiredThirdAccessoryValue", desiredThirdAccessory);
+	cfg.set<int>("up1", pairUp[0]);
+	cfg.set<int>("up2", pairUp[1]);
+	cfg.set<int>("down1", pairDown[0]);
+	cfg.set<int>("down2", pairDown[1]);
+	cfg.set<int>("left1", pairLeft[0]);
+	cfg.set<int>("left2", pairLeft[1]);
+	cfg.set<int>("right1", pairRight[0]);
+	cfg.set<int>("right2", pairRight[1]);
 	cfg.save(GameHook::cfgString);
 }
