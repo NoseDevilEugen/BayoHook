@@ -59,7 +59,7 @@ bool GameHook::forceThirdAccessory_toggle = false;
 int GameHook::desiredThirdAccessory = 0;
 
 int GameHook::pairUp[2] = { 0, 0 };
-int GameHook::pairDown[2] = { 1, 1 };
+int GameHook::pairDown[2] = { 18, 18 };
 int GameHook::pairLeft[2] = { 2, 6 };
 int GameHook::pairRight[2] = { 3, 7 };
 
@@ -112,9 +112,9 @@ void GameHook::GameImGui(void) {
     GameHook::maxWindowHeight = ImGui::GetIO().DisplaySize.y * 0.9f;
     GameHook::windowHeightBorder = ImGui::GetFontSize() * 6.0f;
 
-    /*if (ImGui::Button("Save config")) {
+    if (ImGui::Button("Save config")) {
         GameHook::onConfigSave(GameHook::cfg);
-    }*/
+    }
 
     if (ImGui::BeginTabBar("Trainer", ImGuiTabBarFlags_FittingPolicyScroll | ImGuiTabBarFlags_NoTooltip)) {
         if (ImGui::BeginTabItem("General")) {
@@ -923,6 +923,48 @@ void GameHook::GameImGui(void) {
             ImGui::EndTabItem();
         }
 
+        if (ImGui::BeginTabItem("Weapons")) {
+            ImGui::BeginChild("WeaponsChild");
+
+            help_marker("Set desired pair of weapon to the D-pad direction. If not working, go into weapon menu once.");
+            ImGui::PushItemWidth(inputItemWidth);
+
+            ImGui::Text("UP");
+            ImGui::InputInt("##WeaponUP1InputInt", &GameHook::pairUp[0], 1, 10);
+            ImGui::SameLine();
+            ImGui::Text(GameHook::WeaponNames(GameHook::pairUp[0]));
+            ImGui::InputInt("##WeaponUP2InputInt", &GameHook::pairUp[1], 1, 10);
+            ImGui::SameLine();
+            ImGui::Text(GameHook::WeaponNames(GameHook::pairUp[1]));
+
+            ImGui::Text("DOWN");
+            ImGui::InputInt("##WeaponDOWN1InputInt", &GameHook::pairDown[0], 1, 10);
+            ImGui::SameLine();
+            ImGui::Text(GameHook::WeaponNames(GameHook::pairDown[0]));
+            ImGui::InputInt("##WeaponDOWN2InputInt", &GameHook::pairDown[1], 1, 10);
+            ImGui::SameLine();
+            ImGui::Text(GameHook::WeaponNames(GameHook::pairDown[1]));
+
+            ImGui::Text("LEFT");
+            ImGui::InputInt("##WeaponLEFT1InputInt", &GameHook::pairLeft[0], 1, 10);
+            ImGui::SameLine();
+            ImGui::Text(GameHook::WeaponNames(GameHook::pairLeft[0]));
+            ImGui::InputInt("##WeaponLEFT2InputInt", &GameHook::pairLeft[1], 1, 10);
+            ImGui::SameLine();
+            ImGui::Text(GameHook::WeaponNames(GameHook::pairLeft[1]));
+
+            ImGui::Text("RIGHT");
+            ImGui::InputInt("##WeaponRIGHT1InputInt", &GameHook::pairRight[0], 1, 10);
+            ImGui::SameLine();
+            ImGui::Text(GameHook::WeaponNames(GameHook::pairRight[0]));
+            ImGui::InputInt("##WeaponRIGHT2InputInt", &GameHook::pairRight[1], 1, 10);
+            ImGui::SameLine();
+            ImGui::Text(GameHook::WeaponNames(GameHook::pairRight[1]));
+            ImGui::EndChild();
+            ImGui::EndTabItem();
+            GameHook::windowHeightHack = 360;
+        }
+
         if (ImGui::BeginTabItem("Info")) {
             ImGui::BeginChild("InfoChild");
 
@@ -1011,64 +1053,7 @@ void GameHook::GameImGui(void) {
 
         }
 
-        if (ImGui::BeginTabItem("Weapons")) {
-            ImGui::BeginChild("WeaponsChild");
-            ImGui::Text("Weapon Set UP:");
-
-            ImGui::PushItemWidth(inputItemWidth);
-
-            ImGui::Text("UP");
-            ImGui::InputInt("##WeaponUP1InputInt", &GameHook::pairUp[0], 1, 10);
-            ImGui::SameLine();
-            ImGui::Text(GameHook::WeaponNames(GameHook::pairUp[0]));
-            ImGui::InputInt("##WeaponUP2InputInt", &GameHook::pairUp[1], 1, 10);
-            ImGui::SameLine();
-            ImGui::Text(GameHook::WeaponNames(GameHook::pairUp[1]));
-
-            ImGui::Text("DOWN");
-            ImGui::InputInt("##WeaponDOWN1InputInt", &GameHook::pairDown[0], 1, 10);
-            ImGui::SameLine();
-            ImGui::Text(GameHook::WeaponNames(GameHook::pairDown[0]));
-            ImGui::InputInt("##WeaponDOWN2InputInt", &GameHook::pairDown[1], 1, 10);
-            ImGui::SameLine();
-            ImGui::Text(GameHook::WeaponNames(GameHook::pairDown[1]));
-
-            ImGui::Text("LEFT");
-            ImGui::InputInt("##WeaponLEFT1InputInt", &GameHook::pairLeft[0], 1, 10);
-            ImGui::SameLine();
-            ImGui::Text(GameHook::WeaponNames(GameHook::pairLeft[0]));
-            ImGui::InputInt("##WeaponLEFT2InputInt", &GameHook::pairLeft[1], 1, 10);
-            ImGui::SameLine();
-            ImGui::Text(GameHook::WeaponNames(GameHook::pairLeft[1]));
-
-            ImGui::Text("RIGHT");
-            ImGui::InputInt("##WeaponRIGHT1InputInt", &GameHook::pairRight[0], 1, 10);
-            ImGui::SameLine();
-            ImGui::Text(GameHook::WeaponNames(GameHook::pairRight[0]));
-            ImGui::InputInt("##WeaponRIGHT2InputInt", &GameHook::pairRight[1], 1, 10);
-            ImGui::SameLine();
-            ImGui::Text(GameHook::WeaponNames(GameHook::pairRight[1]));
-
-            /*
-            ImGui::Text("Weapon Set A:");
-            ImGui::Text(GameHook::WeaponNames(weaponA1));
-            ImGui::SameLine();
-            ImGui::Text(" / ");
-            ImGui::SameLine();
-            ImGui::Text(GameHook::WeaponNames(weaponA2));
-
-            ImGui::Text("Weapon Set B:");
-            ImGui::Text(GameHook::WeaponNames(weaponB1));
-            ImGui::SameLine();
-            ImGui::Text(" / ");
-            ImGui::SameLine();
-            ImGui::Text(GameHook::WeaponNames(weaponB2));
-
-            */
-            ImGui::EndChild();
-            ImGui::EndTabItem();
-            GameHook::windowHeightHack = 360;
-        }
+        
 
         ImGui::EndTabBar();
 
