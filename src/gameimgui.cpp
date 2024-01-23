@@ -58,12 +58,15 @@ int GameHook::comboMakerStringID2 = 0;
 bool GameHook::forceThirdAccessory_toggle = false;
 int GameHook::desiredThirdAccessory = 0;
 
-int GameHook::pairUp[2] = { 0, 0 };
-int GameHook::pairDown[2] = { 18, 18 };
-int GameHook::pairLeft[2] = { 2, 6 };
-int GameHook::pairRight[2] = { 3, 7 };
+int GameHook::pairUp[2] = { 0, 0 };//scarborough fair x2
+int GameHook::pairDown[2] = { 18, 18 };//rodin x2
+int GameHook::pairLeft[2] = { 2, 6 };//shuraba, durga
+int GameHook::pairRight[2] = { 3, 7 };//kulshedra, kilgore
 
 int GameHook::currentPair[2] = { 0, 0 };
+
+bool GameHook::weaponswap_toggle = false;
+bool GameHook::moveid_toggle = false;
 
 void GameHook::GameTick(void) {
     uintptr_t actorPlayable = *(uintptr_t*)GameHook::playerPointerAddress;
@@ -925,7 +928,10 @@ void GameHook::GameImGui(void) {
 
         if (ImGui::BeginTabItem("Weapons")) {
             ImGui::BeginChild("WeaponsChild");
+            
+            ImGui::Checkbox("Patch moveID", &GameHook::forbidMovement_toggle);
 
+            ImGui::Checkbox("Use D-pad set switcher", &GameHook::weaponswap_toggle);    
             help_marker("Set desired pair of weapon to the D-pad direction. If not working, go into weapon menu once.");
             ImGui::PushItemWidth(inputItemWidth);
 
