@@ -32,7 +32,8 @@ public:
 	static int currentSet;
 
 	static bool isCallerCalled;
-
+	static bool weaponswap_toggle;
+	static bool moveid_toggle;
 
 	static int pairUp[2];
 	static int pairDown[2];
@@ -41,7 +42,7 @@ public:
 
 	static int currentPair[2];
 
-
+	static bool forbidMovement_toggle;
 	static bool takeNoDamage_toggle;
 	static bool focusPatch_toggle;
 	static bool infJumps_toggle;
@@ -70,6 +71,7 @@ public:
 	static bool infDivekick_toggle;
 	static bool parryOffset_toggle;
 	// patch functions
+	static void ForbidMovement(bool enabled);
 	static void TakeNoDamage(bool enabled);
 	static void DisableKilling(bool enabled);
 	static void FocusPatch(bool enabled);
@@ -120,6 +122,9 @@ public:
 	static bool haloDisplay_toggle;
 	static int haloDisplayValue;
 	//
+
+	static int testMoveSwap;
+	static int testMoveZero;
 	static bool moveIDSwap_toggle;
 	static int moveIDSwapSourceMove1;
 	static int moveIDSwapSourceMove2;
