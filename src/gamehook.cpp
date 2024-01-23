@@ -2,6 +2,15 @@
 
 bool GameHook::isCallerCalled = false;
 
+
+bool GameHook::forbidMovement_toggle = false;
+void GameHook::ForbidMovement(bool enabled) {
+	if (enabled)
+		GameHook::_nop((char*)(0x6EDB52F6), 6);
+	else
+		GameHook::_patch((char*)(0x6EDB52F6), (char*)"\x89\x91\x4C\x03\x00\x00", 6);
+}
+
 // patches
 bool GameHook::takeNoDamage_toggle = false;
 void GameHook::TakeNoDamage(bool enabled) {
@@ -438,6 +447,8 @@ int GameHook::moveIDSwapSourceMove1 = -1;
 int GameHook::moveIDSwapSourceMove2 = -1;
 int GameHook::moveIDSwapDesiredMove1 = 0;
 int GameHook::moveIDSwapDesiredMove2 = 0;
+int GameHook::testMoveSwap = -1;
+int GameHook::testMoveZero = -1;
 
 static __declspec(naked) void MoveIDSwapDetour(void) {
 	_asm {
@@ -450,14 +461,14 @@ static __declspec(naked) void MoveIDSwapDetour(void) {
 		pop eax
 		jne originalcode
 
-		cmp edx, [GameHook::moveIDSwapSourceMove1]
+		cmp edx, [GameHook::testMoveZero]
 		je newMove1
 		cmp edx, [GameHook::moveIDSwapSourceMove2]
 		je newMove2
 		jmp originalcode
 
 		newMove1:
-		mov edx, [GameHook::moveIDSwapDesiredMove1]
+		mov edx, [GameHook::testMoveSwap]
 		jmp originalcode
 
 		newMove2:
@@ -2118,10 +2129,11 @@ void GameHook::SaveStates_LoadState() {
 }
 
 void GameHook::WeaponSwapCaller(void) {
-	//GameHook::isCallerCalled=true;
 	uintptr_t weaponSwapCallAddress = 0xC43ED0;
-	//
 	uintptr_t addressOf = 0x05BB8B60;
+	//GameHook::_nop((char*)(0x6EDB52F6), 6);
+	//GameHook::_nop((char*)(0x004bd045), 4);
+		
 	__asm {
 		pushad
 		pushfd
@@ -2129,8 +2141,8 @@ void GameHook::WeaponSwapCaller(void) {
 		popfd
 		popad
 	}
-	//GameHook::isCallerCalled = false;
-	//GameHook::switchLimit = 90;
+	//GameHook::_patch((char*)(0x004bd045), (char*)"\x8B\x54\x24\x08", 4);
+	//GameHook::_patch((char*)(0x6EDB52F6), (char*)"\x89\x91\x4C\x03\x00\x00", 6);
 }
 
 
@@ -2155,7 +2167,6 @@ bool install_hook_absolute(uintptr_t location, std::unique_ptr<FunctionHook>& ho
 	if (!hook->create()) {
 		return false;
 	}
-
 	if (next_instruction_offset) {
 		if (ret) {
 			*ret = location + next_instruction_offset;
@@ -2166,6 +2177,7 @@ bool install_hook_absolute(uintptr_t location, std::unique_ptr<FunctionHook>& ho
 			*ret = hook->get_original();
 		}
 	}
+	
 	return true;
 }
 
@@ -2299,6 +2311,7 @@ void GameHook::onConfigLoad(const utils::Config& cfg) {
 	pairLeft[1] = cfg.get<int>("left2").value_or(6);
 	pairRight[0] = cfg.get<int>("right1").value_or(3);
 	pairRight[1] = cfg.get<int>("right2").value_or(7);
+	weaponswap_toggle = cfg.get<bool>("weaponswap").value_or(false);
 
 	//tick
 	/*comboMakerTest1 = cfg.get<bool>("ComboMakerTest1Toggle").value_or(false);
@@ -2396,5 +2409,7 @@ void GameHook::onConfigSave(utils::Config& cfg) {
 	cfg.set<int>("left2", pairLeft[1]);
 	cfg.set<int>("right1", pairRight[0]);
 	cfg.set<int>("right2", pairRight[1]);
+	cfg.set<bool>("weaponswap", weaponswap_toggle);
+
 	cfg.save(GameHook::cfgString);
 }
