@@ -37,7 +37,7 @@ int GameHook::previousMoveWrite = -1;
 int maxLimit = 90;
 
 
-
+float GameHook::animFrame = 0;
 
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -108,16 +108,27 @@ LRESULT CALLBACK Base::Hooks::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 	{
 		XINPUT_STATE state;
 		ZeroMemory(&state, sizeof(XINPUT_STATE));
-
 		
 		if (GameHook::moveIDSwap_toggle == true)
 		{
 			uintptr_t actorPlayable = *(uintptr_t*)GameHook::playerPointerAddress;
-			float& playerAnimFrame = *(float*)(actorPlayable + 0x3E4);
-			if (playerAnimFrame > 10)
+			if (actorPlayable)
 			{
-				GameHook::moveIDSwap_toggle = false;
-				GameHook::testMoveSwap = -1;
+				float& playerAnimFrame = *(float*)(actorPlayable + 0x3E4);
+				if (playerAnimFrame > 10)
+				{
+					GameHook::moveIDSwap_toggle = false;
+					GameHook::testMoveSwap = -1;
+					GameHook::animFrame = 0;
+				}
+				else if (playerAnimFrame == 1)
+				{
+					playerAnimFrame = GameHook::animFrame + 1;
+				}
+				else
+				{
+					GameHook::animFrame = playerAnimFrame;
+				}
 			}
 		}
 
@@ -183,6 +194,10 @@ LRESULT CALLBACK Base::Hooks::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 						GameHook::moveIDSwap_toggle = true;
 						GameHook::testMoveZero = 0;
 						GameHook::testMoveSwap = playerMoveID;
+						if (playerAnimFrame > 0)
+						{
+							GameHook::animFrame = playerAnimFrame;
+						}
 					}
 					GameHook::WeaponSwapCaller();
 
@@ -191,6 +206,10 @@ LRESULT CALLBACK Base::Hooks::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 						&& playerMoveID != 6)
 					{
 						GameHook::testMoveSwap = playerMoveID;
+						if (playerAnimFrame > 0)
+						{
+							GameHook::animFrame = playerAnimFrame;
+						}
 					}
 					GameHook::currentSet = -1;
 					//playerMoveID = 13;
